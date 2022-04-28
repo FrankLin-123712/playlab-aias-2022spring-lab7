@@ -77,6 +77,7 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 
         //follow the ISA and combine the fragment information in binary form
 		switch(i.op){
+			//-------------R-type---------------
 			case ADD:
 			    // rf[i.a1.reg] = rf[i.a2.reg] + rf[i.a3.reg]; break;
 				binary = (0x0C << 2) + 0x03; //opcode
@@ -86,6 +87,7 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 				binary += i.a3.reg << 20;    //rs2
 				binary += 0b0000000 << 25;   //funct7
 			break;
+
 			case SUB:
 				// rf[i.a1.reg] = rf[i.a2.reg] + rf[i.a3.reg]; break;
 				binary = (0x0C << 2) + 0x03; //opcode
@@ -95,16 +97,87 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 				binary += i.a3.reg << 20;    //rs2
 				binary += 0b0100000 << 25;   //funct7
 			break;
-			// case SLT: rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) < (*(int32_t*)&rf[i.a3.reg]) ? 1 : 0; break;
-			// case SLTU: rf[i.a1.reg] = rf[i.a2.reg] + rf[i.a3.reg]; break;
-			// case AND: rf[i.a1.reg] = rf[i.a2.reg] & rf[i.a3.reg]; break;
-			// case OR: rf[i.a1.reg] = rf[i.a2.reg] | rf[i.a3.reg]; break;
-			// case XOR: rf[i.a1.reg] = rf[i.a2.reg] ^ rf[i.a3.reg]; break;
-			// case SLL: rf[i.a1.reg] = rf[i.a2.reg] << rf[i.a3.reg]; break;
-			// case SRL: rf[i.a1.reg] = rf[i.a2.reg] >> rf[i.a3.reg]; break;
-			// case SRA: rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) >> rf[i.a3.reg]; break;
 
+			case SLT: 
+				//rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) < (*(int32_t*)&rf[i.a3.reg]) ? 1 : 0; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b010 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
 
+			case SLTU: 
+				//rf[i.a1.reg] = rf[i.a2.reg] + rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b011 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
+
+			case AND: 
+				//rf[i.a1.reg] = rf[i.a2.reg] & rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b111 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
+
+			case OR: 
+				//rf[i.a1.reg] = rf[i.a2.reg] | rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b110 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
+
+			case XOR: 
+				//rf[i.a1.reg] = rf[i.a2.reg] ^ rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b100 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
+
+			case SLL: 
+				//rf[i.a1.reg] = rf[i.a2.reg] << rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b001 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
+
+			case SRL: 
+				//rf[i.a1.reg] = rf[i.a2.reg] >> rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b101 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0000000 << 25;   //funct7
+			break;
+
+			case SRA: 
+				//rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) >> rf[i.a3.reg]; break;
+				binary = (0x0C << 2) + 0x03; //opcodebinary += i.a1.reg << 7;     //rd
+				binary += 0b101 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.reg << 20;    //rs2
+				binary += 0b0100000 << 25;   //funct7
+			break;
+
+			//---------------I-type---------------
 			case ADDI: 
 				// rf[i.a1.reg] = rf[i.a2.reg] + i.a3.imm; break;
 			    binary = (0x04 << 2) + 0x03; //opcode
@@ -113,47 +186,243 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 				binary += i.a2.reg << 15;    //rs1
 				binary += i.a3.imm << 20;    //imm
 			break;
-			// case SLTI: rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) < (*(int32_t*)&(i.a3.imm)) ? 1 : 0; break;
-			// case SLTIU: rf[i.a1.reg] = rf[i.a2.reg] < i.a3.imm ? 1 : 0; break;
-			// case ANDI: rf[i.a1.reg] = rf[i.a2.reg] & i.a3.imm; break;
-			// case ORI: rf[i.a1.reg] = rf[i.a2.reg] | i.a3.imm; break;
-			// case XORI: rf[i.a1.reg] = rf[i.a2.reg] ^ i.a3.imm; break;
-			// case SLLI: rf[i.a1.reg] = rf[i.a2.reg] << i.a3.imm; break;
-			// case SRLI: rf[i.a1.reg] = rf[i.a2.reg] >> i.a3.imm; break;
-			// case SRAI: rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) >> i.a3.imm; break;
 
-			// case LB:
-			// case LBU: 
-			// case LH:
-			// case LHU:
-			case LW:
-				// rf[i.a1.reg] = mem_read(mem, rf[i.a2.reg]+i.a3.imm, i.op); break;
-				binary = 0x03; //opcode
-				binary += i.a1.reg << 7; //rd
-				binary += 0b010 << 12; //funct3
-				binary += i.a2.reg << 15; //rs1
-				binary += i.a3.imm << 20; //offset
+			case SLTI: 
+				//rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) < (*(int32_t*)&(i.a3.imm)) ? 1 : 0; break;
+				binary = (0x04 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b010 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.imm << 20;    //imm
+			break;
+
+			case SLTIU: 
+				//rf[i.a1.reg] = rf[i.a2.reg] < i.a3.imm ? 1 : 0; break;
+				binary = (0x04 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b011 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.imm << 20;    //imm
+			break;
+
+			case ANDI: 
+				//rf[i.a1.reg] = rf[i.a2.reg] & i.a3.imm; break;
+				binary = (0x04 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b111 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.imm << 20;    //imm
+			break;
+
+			case ORI: 
+				//rf[i.a1.reg] = rf[i.a2.reg] | i.a3.imm; break;
+				binary = (0x04 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b110 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.imm << 20;    //imm
+			break;
+
+			case XORI: 
+				//rf[i.a1.reg] = rf[i.a2.reg] ^ i.a3.imm; break;
+				binary = (0x04 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b100 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.imm << 20;    //imm
 			break;
 			
+			case SLLI: 
+				//rf[i.a1.reg] = rf[i.a2.reg] << i.a3.imm; break;
+				binary = (0x04 << 2) + 0x03; 			//opcode
+				binary += i.a1.reg << 7;     			//rd
+				binary += 0b001 << 12;       			//funct3
+				binary += i.a2.reg << 15;    			//rs1
+				binary += (i.a3.imm & (0x1f)) << 20;    //shamt
+			break;
+
+			case SRLI: 
+				//rf[i.a1.reg] = rf[i.a2.reg] >> i.a3.imm; break;
+				binary = (0x04 << 2) + 0x03; 			//opcode
+				binary += i.a1.reg << 7;     			//rd
+				binary += 0b101 << 12;       			//funct3
+				binary += i.a2.reg << 15;    			//rs1
+				binary += (i.a3.imm & (0x1f)) << 20;    //shamt
+			break;
+
+			case SRAI: 
+				//rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) >> i.a3.imm; break;
+				binary = (0x04 << 2) + 0x03; 			//opcode
+				binary += i.a1.reg << 7;     			//rd
+				binary += 0b101 << 12;       			//funct3
+				binary += i.a2.reg << 15;    			//rs1
+				binary += (i.a3.imm & (0x1f)) << 20;    //shamt
+				binary += 0b0100000 << 25;              //funct7
+			break;
+
+			case LB:
+				binary = 0x03;             //opcode
+				binary += i.a1.reg << 7;   //rd
+				binary += 0b000 << 12;     //funct3
+				binary += i.a2.reg << 15;  //rs1
+				binary += i.a3.imm << 20;  //offset
+			break;
+
+			case LBU: 
+				binary = 0x03;             //opcode
+				binary += i.a1.reg << 7;   //rd
+				binary += 0b100 << 12;     //funct3
+				binary += i.a2.reg << 15;  //rs1
+				binary += i.a3.imm << 20;  //offset
+			break;
+
+			case LH:
+				binary = 0x03;             //opcode
+				binary += i.a1.reg << 7;   //rd
+				binary += 0b001 << 12;     //funct3
+				binary += i.a2.reg << 15;  //rs1
+				binary += i.a3.imm << 20;  //offset
+			break;
+			
+			case LHU:
+				binary = 0x03;             //opcode
+				binary += i.a1.reg << 7;   //rd
+				binary += 0b101 << 12;     //funct3
+				binary += i.a2.reg << 15;  //rs1
+				binary += i.a3.imm << 20;  //offset
+			break;
+
+			case LW:
+				// rf[i.a1.reg] = mem_read(mem, rf[i.a2.reg]+i.a3.imm, i.op); break;
+				binary = 0x03;             //opcode
+				binary += i.a1.reg << 7;   //rd
+				binary += 0b010 << 12;     //funct3
+				binary += i.a2.reg << 15;  //rs1
+				binary += i.a3.imm << 20;  //offset
+			break;
+			
+			//---------------S-type---------------
 			// case SB: 
-			// case SH: 
-			// case SW: mem_write(mem, rf[i.a2.reg]+i.a3.imm, rf[i.a1.reg], i.op); break;
-			// /*
 
-			// case SB: mem[rf[i.a2.reg]+i.a3.imm] = *(uint8_t*)&(rf[i.a1.reg]); break;
-			// case SH: *(uint16_t*)&(mem[rf[i.a2.reg]+i.a3.imm]) = *(uint16_t*)&(rf[i.a1.reg]); break;
-			// case SW: 
-			// 	*(uint32_t*)&(mem[rf[i.a2.reg]+i.a3.imm]) = rf[i.a1.reg]; 
-			// 	//printf( "Writing %x to addr %x\n", rf[i.a1.reg], rf[i.a2.reg]+i.a3.imm );
 			// break;
-			// */
 
-			// case BEQ: if ( rf[i.a1.reg] == rf[i.a2.reg] ) pc_next = i.a3.imm; break;
-			// case BGE: if ( *(int32_t*)&rf[i.a1.reg] >= *(int32_t*)&rf[i.a2.reg] ) pc_next = i.a3.imm; break;
-			// case BGEU: if ( rf[i.a1.reg] >= rf[i.a2.reg] ) pc_next = i.a3.imm; 
-			// 	break;
-			// case BLT: if ( *(int32_t*)&rf[i.a1.reg] < *(int32_t*)&rf[i.a2.reg] ) pc_next = i.a3.imm; break;
-			// case BLTU: if ( rf[i.a1.reg] < rf[i.a2.reg] ) pc_next = i.a3.imm; break;
+			// case SH: 
+
+			// break;
+			
+			// case SW: 
+				
+			// break;
+
+			case SB:
+				//mem[rf[i.a2.reg]+i.a3.imm] = *(uint8_t*)&(rf[i.a1.reg]); break;
+				binary = (0x08 << 2) + 0x03;        //opcode
+				binary += (i.a3.imm & 0x1f) << 7;   //imm[4:0]
+				binary += 0b000 << 12;              //funct3
+				binary += i.a2.reg << 15;           //rs1
+				binary += i.a1.reg << 20;           //rs2
+				binary += (i.a3.imm & 0xfe0) << 25; //imm[11:5]
+			break;
+
+			case SH:
+				//*(uint16_t*)&(mem[rf[i.a2.reg]+i.a3.imm]) = *(uint16_t*)&(rf[i.a1.reg]); break;
+				binary = (0x08 << 2) + 0x03;        //opcode
+				binary += (i.a3.imm & 0x1f) << 7;   //imm[4:0]
+				binary += 0b001 << 12;              //funct3
+				binary += i.a2.reg << 15;           //rs1
+				binary += i.a1.reg << 20;           //rs2
+				binary += (i.a3.imm & 0xfe0) << 25; //imm[11:5]
+			break;
+
+			case SW: 
+				//mem_write(mem, rf[i.a2.reg]+i.a3.imm, rf[i.a1.reg], i.op); break;
+				//*(uint32_t*)&(mem[rf[i.a2.reg]+i.a3.imm]) = rf[i.a1.reg]; 
+				//printf( "Writing %x to addr %x\n", rf[i.a1.reg], rf[i.a2.reg]+i.a3.imm );
+				binary = (0x08 << 2) + 0x03;        //opcode
+				binary += (i.a3.imm & 0x1f) << 7;   //imm[4:0]
+				binary += 0b010 << 12;              //funct3
+				binary += i.a2.reg << 15;           //rs1
+				binary += i.a1.reg << 20;           //rs2
+				binary += (i.a3.imm & 0xfe0) << 25; //imm[11:5]
+			break;
+			
+
+			//---------------B-type---------------
+			case BEQ: 
+				//if ( rf[i.a1.reg] == rf[i.a2.reg] ) pc_next = i.a3.imm; break;
+				binary = (0x18 << 2) + 0x03;  //opcode
+				binary += (0b000 << 12);      //funct3
+				binary += i.a1.reg << 15;     //rs1
+				binary += i.a2.reg << 20;     //rs2
+                
+				offset = i.a3.imm - (inst_cnt << 2);
+
+				binary += (offset & 0x800) >> 4; // imm[11] -> inst[7]
+				binary += (offset & 0x1E) << 7; // imm[4:1] -> inst[11:8]
+				binary += (offset & 0x7E0) << 20; // imm[10:5] -> inst[30:25]
+				binary += (offset & 0x1000) << 19; // imm[12] -> inst[31]
+			break;
+
+			case BGE: 
+				//if ( *(int32_t*)&rf[i.a1.reg] >= *(int32_t*)&rf[i.a2.reg] ) pc_next = i.a3.imm; break;
+				binary = (0x18 << 2) + 0x03;  //opcode
+				binary += (0b101 << 12);      //funct3
+				binary += i.a1.reg << 15;     //rs1
+				binary += i.a2.reg << 20;     //rs2
+                
+				offset = i.a3.imm - (inst_cnt << 2);
+
+				binary += (offset & 0x800) >> 4; // imm[11] -> inst[7]
+				binary += (offset & 0x1E) << 7; // imm[4:1] -> inst[11:8]
+				binary += (offset & 0x7E0) << 20; // imm[10:5] -> inst[30:25]
+				binary += (offset & 0x1000) << 19; // imm[12] -> inst[31]
+			break;
+
+			case BGEU: 
+				//if ( rf[i.a1.reg] >= rf[i.a2.reg] ) pc_next = i.a3.imm; 
+				binary = (0x18 << 2) + 0x03;  //opcode
+				binary += (0b111 << 12);      //funct3
+				binary += i.a1.reg << 15;     //rs1
+				binary += i.a2.reg << 20;     //rs2
+                
+				offset = i.a3.imm - (inst_cnt << 2);
+
+				binary += (offset & 0x800) >> 4; // imm[11] -> inst[7]
+				binary += (offset & 0x1E) << 7; // imm[4:1] -> inst[11:8]
+				binary += (offset & 0x7E0) << 20; // imm[10:5] -> inst[30:25]
+				binary += (offset & 0x1000) << 19; // imm[12] -> inst[31]
+			break;
+
+			case BLT: 
+				//if ( *(int32_t*)&rf[i.a1.reg] < *(int32_t*)&rf[i.a2.reg] ) pc_next = i.a3.imm; break;
+				binary = (0x18 << 2) + 0x03;  //opcode
+				binary += (0b100 << 12);      //funct3
+				binary += i.a1.reg << 15;     //rs1
+				binary += i.a2.reg << 20;     //rs2
+                
+				offset = i.a3.imm - (inst_cnt << 2);
+
+				binary += (offset & 0x800) >> 4; // imm[11] -> inst[7]
+				binary += (offset & 0x1E) << 7; // imm[4:1] -> inst[11:8]
+				binary += (offset & 0x7E0) << 20; // imm[10:5] -> inst[30:25]
+				binary += (offset & 0x1000) << 19; // imm[12] -> inst[31]
+			break;
+
+			case BLTU: 
+				//if ( rf[i.a1.reg] < rf[i.a2.reg] ) pc_next = i.a3.imm; break;
+				binary = (0x18 << 2) + 0x03;  //opcode
+				binary += (0b110 << 12);      //funct3
+				binary += i.a1.reg << 15;     //rs1
+				binary += i.a2.reg << 20;     //rs2
+                
+				offset = i.a3.imm - (inst_cnt << 2);
+
+				binary += (offset & 0x800) >> 4; // imm[11] -> inst[7]
+				binary += (offset & 0x1E) << 7; // imm[4:1] -> inst[11:8]
+				binary += (offset & 0x7E0) << 20; // imm[10:5] -> inst[30:25]
+				binary += (offset & 0x1000) << 19; // imm[12] -> inst[31]
+			break;
+
 			case BNE:
 				// if ( rf[i.a1.reg] != rf[i.a2.reg] ) pc_next = i.a3.imm; break;
 				binary = (0x18 << 2) + 0x03;  //opcode
@@ -169,20 +438,41 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 				binary += (offset & 0x1000) << 19; // imm[12] -> inst[31]
 			break;
 
-			// case JAL:
-			// 	rf[i.a1.reg] = pc + 4;
-			// 	pc_next = i.a2.imm;
-			// 	//printf( "jal %d %x\n", pc+4, pc_next );
-			// 	break;
-			// case JALR:
+			//---------------J-type---------------
+			case JAL:
+				// 	rf[i.a1.reg] = pc + 4;
+				// 	pc_next = i.a2.imm;
+				//printf( "jal %d %x\n", pc+4, pc_next );
+				binary = (0x1B << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+
+				offset = i.a2.imm - (inst_cnt << 2);
+
+				binary += (offset & 0x7FE) << 20;    //imm[10:1] -> inst[30:21]
+				binary += (offset & 0x100000) << 11; //imm[10:1] -> inst[30:21]
+				binary += (offset & 0x800) << 9;     //imm[10:1] -> inst[30:21]
+				binary += (offset & 0xFF000);        //imm[10:1] -> inst[30:21]
+			break;
+
+			case JALR:
 			// 	rf[i.a1.reg] = pc + 4;
 			// 	pc_next = rf[i.a2.reg] + i.a3.imm;
 			// 	//printf( "jalr %d %d(%d)\n", i.a1.reg, i.a3.imm, i.a2.reg );
-			// 	break;
-			// case AUIPC:
+				binary = (0x19 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += 0b000 << 12;       //funct3
+				binary += i.a2.reg << 15;    //rs1
+				binary += i.a3.imm << 20;    //imm
+			break;
+
+			//---------------U-type---------------
+			case AUIPC:
 			// 	rf[i.a1.reg] = pc + (i.a2.imm<<12);
 			// 	//printf( "auipc %x \n", rf[i.a1.reg] );
-			// 	break;
+				binary = (0x05 << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
+				binary += i.a2.reg << 12;    //imm[31:12]
+			break;
 
 			case LUI:
 				// rf[i.a1.reg] = (i.a2.imm<<12);
@@ -191,10 +481,13 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 				binary += (i.a2.imm << 12);
 			break;
 			
+			//---------------HCF---------------
 			case HCF:
 			    binary = 0x0000000B;
 				dexit = true;
 			break;
+
+			//---------------Default---------------
 			case UNIMPL:
 			default:
 				printf( "Reached an unimplemented instruction!\n" );

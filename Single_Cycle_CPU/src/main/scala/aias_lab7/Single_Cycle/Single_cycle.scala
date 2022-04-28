@@ -76,8 +76,8 @@ class Single_Cycle extends Module {
     //ALU
     val rdata_or_zero = Wire(UInt(32.W))
     rdata_or_zero := Mux(ct.io.Lui,0.U(32.W),rf.io.rdata(0))
-    alu.io.src1 := Mux(ct.io.ASel,pc.io.pc,rdata_or_zero)
-    alu.io.src2 := Mux(ct.io.BSel,ig.io.imm,rf.io.rdata(1))
+    alu.io.src1 := Mux(ct.io.ASel,pc.io.pc,rdata_or_zero)   //1 for pc , 0 for rdata_or_zero
+    alu.io.src2 := Mux(ct.io.BSel,ig.io.imm,rf.io.rdata(1)) //1 for imm, 0 for rdata(1)
     alu.io.ALUSel := ct.io.ALUSel
     
     //Data Memory
