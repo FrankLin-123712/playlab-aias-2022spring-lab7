@@ -170,7 +170,8 @@ void translate_to_machine_code(uint8_t* mem,instr* imem, char* argv1){
 
 			case SRA: 
 				//rf[i.a1.reg] = (*(int32_t*)&rf[i.a2.reg]) >> rf[i.a3.reg]; break;
-				binary = (0x0C << 2) + 0x03; //opcodebinary += i.a1.reg << 7;     //rd
+				binary = (0x0C << 2) + 0x03; //opcode
+				binary += i.a1.reg << 7;     //rd
 				binary += 0b101 << 12;       //funct3
 				binary += i.a2.reg << 15;    //rs1
 				binary += i.a3.reg << 20;    //rs2
