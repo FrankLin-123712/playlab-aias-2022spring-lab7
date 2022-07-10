@@ -261,7 +261,7 @@ uint32_t label_addr(char* label , label_loc* labels, int label_count, int orig_l
 
 //typedef enum {SECTION_NONE, SECTION_TEXT, SECTION_DATA} sectionType;
 int parse_data_element(int line, int size, uint8_t* mem, int offset) {
-	while (char* t = strtok(NULL, " \t\r\n") ) {
+	while (char* t = strtok(NULL, " \t\r\n\"") ) {
 		errno = 0;
 		int64_t v = strtol(t, NULL, 0);
 		int64_t vs = (v>>(size*8));
@@ -300,6 +300,7 @@ int parse_assembler_directive(int line, char* ftok, uint8_t* mem, int memoff) {
 	else if ( 0 == memcmp(ftok, ".half", strlen(ftok)) ) memoff = parse_data_element(line, 2, mem, memoff);
 	else if ( 0 == memcmp(ftok, ".word", strlen(ftok)) ) memoff = parse_data_element(line, 4, mem, memoff);
 	else if ( 0 == memcmp(ftok, ".zero", strlen(ftok)) ) memoff = parse_data_zero(line, mem, memoff);
+	else if ( 0 == memcmp(ftok, ".string", strlen(ftok)) ) memoff = parse_data_element(line, 20, mem, memoff);
 	else {
 		printf( "Undefined assembler directive at line %d: %s\n", line, ftok );
 		//exit(3);

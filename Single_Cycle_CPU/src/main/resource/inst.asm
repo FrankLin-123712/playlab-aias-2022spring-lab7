@@ -1,36 +1,38 @@
-addi x1, x0, 16
-slli x2, x1, 3
-xori x3, x2, 0x800
-slti x4, x2, -3
-sltiu x5, x2, -3
-srli x6, x3, 2
-srai x7, x3, 2
-ori x8, x0, 123
-andi x9, x5, -1
-add x10, x5, x6
-sub x11, x3, x7
-sll x12, x5, x8
-slt x13, x7, x9
-sltu x14, x9, x2
-xor x15, x11, x3
-srl x16, x13, x4
-sra x17, x15, x5
-or x18, x17, x1
-and x19, x13, x10
-sb x3, 3(x0)
-sw x1, 4(x0)
-lb x20, 3(x0)
-lw x21, 4(x0)
-lbu x22, 3(x0)
-lui x24, 0x1238
-beq x1, x2, hello
-bne x1, x1, hello
-blt x1, x0, hello
-bge x3, x0, hello
-bltu x3, x11, hello
-bgeu x11, x3, hello
-jalr x25, 132(x0)
-add x10, x5, x6
-jal x0, exit
-sll x12, x5, x8
+addi t0, zero, 0
+lui x06, 0x00000008
+addi x06, x06, 0x0000002c
+lw t1, 0(t1)
+addi t1, t1, -1
+add s10, t1, zero
+addi a5, zero, -1
+lui x18, 0x00000008
+addi x18, x18, 0x00000030
+lw s2, 0(s2)
+lui x08, 0x00000008
+addi x08, x08, 0x00000000
+jal ra, binary_search
+blt a5, x0, fail
+j x0, exit
+add a2, t0, t1
+srli a2, a2, 1
+blt s10, a2, fail
+blt a2, x0, fail
+add t2, a2, zero
+slli t2, t2, 2
+add t2, t2, s0
+lw t2, 0(t2)
+beq t2, s2, find
+bge t0, t1, fail
+blt s2, t2, less
+addi t0, a2, 1
+j x0, binary_search
+addi t1, a2, -1
+j x0, binary_search
+jalr x0, x1, x0
+addi a5, x0, -1
+addi x31, s2
+j x0, exit
+add a5, a2, zero
+addi x31, s2
+j x0, exit
 hcf

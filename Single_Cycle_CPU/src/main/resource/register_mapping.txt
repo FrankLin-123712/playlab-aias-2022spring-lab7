@@ -1,0 +1,18 @@
+t0 -> left element index
+t1 -> right element index 
+t2 -> temp reg for now value
+t3
+t4
+t5
+t6
+s0 -> array pointer
+s1
+s2 -> searching value 13
+s3
+s10 -> check right element is out of bound
+a0
+a1
+a2 -> mid = (l+r)/2
+a3
+a4
+a5 -> return index :(default)-1
